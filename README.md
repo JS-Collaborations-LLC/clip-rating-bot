@@ -32,3 +32,8 @@ Clip Rating Bot is a Discord bot built with Node.js that allows users to submit 
 (Guidelines for contributing to the project)
 
 ## License
+
+
+## Thanks to Contributors
+
+- [title](link) - Creator of the bot and developer
