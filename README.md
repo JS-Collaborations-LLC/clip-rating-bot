@@ -10,6 +10,7 @@ Clip Rating Bot is a Discord bot built with Node.js that allows users to submit 
 - Discord members can rate clips using reactions (1-5 stars)
 - Automatic calculation of average ratings for each clip
 - Weekly competition with the top-rated clip winning a coaching session
+- MongoDB integration for data persistence
 
 ## How It Works
 
@@ -21,11 +22,33 @@ Clip Rating Bot is a Discord bot built with Node.js that allows users to submit 
 
 ## Installation
 
-(Instructions for installing and setting up the bot)
+1. Clone the repository
+2. Run `npm install` to install dependencies
+3. Create a `.env` file in the root directory with the following content:
+   ```
+   DISCORD_TOKEN=your_discord_bot_token
+   MONGODB_URI=your_mongodb_connection_string
+   ```
+4. Set up a MongoDB database (local or cloud-based like MongoDB Atlas)
 
 ## Usage
 
-(Commands and instructions for using the bot)
+1. Run the bot using `npm start`
+2. Use the following commands in your Discord server:
+   (List your bot commands here)
+
+## Project Structure
+
+- `src/`: Source code directory
+  - `index.js`: Main bot file
+  - `commandHandler.js`: Handles command loading and execution
+  - `eventHandler.js`: Handles event loading and execution
+  - `config/`: Configuration files
+  - `database/`: Database connection and operations
+  - `utils/`: Utility functions
+- `commands/`: Command files
+- `events/`: Event files
+- `test/`: Test scripts
 
 ## Contributing
 
@@ -33,7 +56,8 @@ Clip Rating Bot is a Discord bot built with Node.js that allows users to submit 
 
 ## License
 
+(Your chosen license)
 
 ## Thanks to Contributors
 
-- [title](link) - Creator of the bot and developer
+- [Your Name](Your Profile Link) - Creator of the bot and developer
