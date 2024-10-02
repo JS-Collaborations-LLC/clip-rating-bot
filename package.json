@@ -12,8 +12,11 @@
   "license": "ISC",
   "description": "Clip Rating Bot is a Discord bot built with Node.js that allows users to submit gaming clips for rating and compete for a weekly coaching session prize. This bot enhances community engagement and provides a fun way for players to showcase their skills.",
   "dependencies": {
+    "clip-rating-bot": "file:",
     "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
