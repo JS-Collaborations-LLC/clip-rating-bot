@@ -3,10 +3,7 @@ require('dotenv').config();
 
 async function testConnection() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('Successfully connected to MongoDB!');
     
     // Get the names of all collections in the database

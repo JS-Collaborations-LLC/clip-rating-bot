@@ -5,9 +5,9 @@ const calculateAverageRating = (ratings) => {
 };
 
 const isValidClipUrl = (url) => {
-  // This is a basic check. You might want to add more specific validation.
-  const urlPattern = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|twitch\.tv)\/\S+$/;
-  return urlPattern.test(url);
+  const youtubePattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}$/;
+  const twitchPattern = /^(https?:\/\/)?(www\.)?twitch\.tv\/[a-zA-Z0-9_]{4,25}\/clip\/[a-zA-Z0-9-]+$/;
+  return youtubePattern.test(url) || twitchPattern.test(url);
 };
 
 const formatDate = (date) => {

@@ -10,60 +10,41 @@ const { connectDB, db } = require('./database/db');
 dotenv.config();
 
 // Create a new client instance
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-  ]
-});
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-// Initialize commands collection
+// Load commands and events
 client.commands = new Collection();
+loadCommands(client);
+loadEvents(client);
 
-// When the client is ready, run this code (only once)
-client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  loadCommands(client);
-});
-
-// Handle interactionCreate event
-client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) return;
-
-  const command = client.commands.get(interaction.commandName);
-
-  if (!command) return;
-
+// Connect to MongoDB and start the bot
+async function startBot() {
   try {
-    await command.execute(interaction);
+    await connectDB();
+    
+    if (process.env.CREATE_TEST_CLIP === 'true') {
+      const testInteractionId = generateUniqueId();
+      const testMessageId = generateUniqueId();
+
+      const testClip = await db.storeClip('https://example.com', 'Test clip', '123456789', testInteractionId, testMessageId);
+      console.log('Test clip stored:', testClip);
+
+      const allClips = await db.getAllClips();
+      console.log('All clips:', allClips);
+    }
+
+    // Login to Discord with your client's token
+    try {
+      await client.login(process.env.DISCORD_TOKEN);
+      console.log('Bot is now online!');
+    } catch (error) {
+      console.error('Error logging in to Discord:', error);
+      process.exit(1);
+    }
   } catch (error) {
-    console.error(error);
-    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    console.error('Error starting the bot:', error);
+    process.exit(1);
   }
-});
+}
 
-// Connect to MongoDB
-connectDB().then(async () => {
-  try {
-    // Test database operations
-    const testClip = await db.storeClip('https://example.com', 'Test clip', '123456789');
-    console.log('Test clip stored:', testClip);
-
-    const allClips = await db.getAllClips();
-    console.log('All clips:', allClips);
-
-    // If these operations succeed, your database is set up correctly
-  } catch (error) {
-    console.error('Database test failed:', error);
-  }
-});
-
-// Now you can use db operations in your bot commands, for example:
-// db.storeClip(url, description, submittedBy)
-// db.addRating(clipId, rating, ratedBy)
-// db.getAllClips()
-// etc.
-
-// Login to Discord with your client's token
-client.login(process.env.DISCORD_TOKEN);
+startBot();
