@@ -20,14 +20,21 @@ loadEvents(client);
 // Connect to MongoDB and start the bot
 async function startBot() {
   try {
-    await connectDB();
-    
-    if (process.env.CREATE_TEST_CLIP === 'true') {
-      const testInteractionId = generateUniqueId();
-      const testMessageId = generateUniqueId();
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+  }
+});
 
-      const testClip = await db.storeClip('https://example.com', 'Test clip', '123456789', testInteractionId, testMessageId);
-      console.log('Test clip stored:', testClip);
+// Connect to MongoDB
+connectDB().then(async () => {
+  try {
+    // Test database operations
+    const testInteractionId = 'test-interaction-' + Date.now();
+    const testMessageId = 'test-message-' + Date.now();
+    const testClip = await db.storeClip('https://example.com', 'Test clip', '123456789', testInteractionId, testMessageId);
+    console.log('Test clip stored:', testClip);
 
       const allClips = await db.getAllClips();
       console.log('All clips:', allClips);
@@ -42,9 +49,9 @@ async function startBot() {
       process.exit(1);
     }
   } catch (error) {
-    console.error('Error starting the bot:', error);
-    process.exit(1);
+    console.error('Database test failed:', error);
   }
-}
+});
 
-startBot();
+// Login to Discord with your client's token
+client.login(process.env.DISCORD_TOKEN);
