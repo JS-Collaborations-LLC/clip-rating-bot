@@ -5,6 +5,7 @@ const { loadCommands } = require('./commandHandler');
 const { loadEvents } = require('./eventHandler');
 const config = require('./config/config');
 const { connectDB, db } = require('./database/db');
+const { generateUniqueId } = require('./utils/helper');
 
 // Load environment variables
 dotenv.config();
@@ -47,9 +48,22 @@ client.on('interactionCreate', async interaction => {
 connectDB().then(async () => {
   try {
     // Test database operations
-    const testClip = await db.storeClip('https://example.com', 'Test clip', '123456789');
+    const testClip = await db.storeClip(
+      'https://example.com',
+      'Test clip',
+      '123456789',
+      generateUniqueId(),
+      generateUniqueId()
+    );
     console.log('Test clip stored:', testClip);
-
+    await db.addRating(testClip.messageId, 5, '123456789');
+    await db.updateRating(testClip.messageId, 10, '123456789');
+    const ratingUpdated = await db.getClipById(testClip._id);
+    console.log('Rating updated:', ratingUpdated);
+    await db.removeRating(testClip.messageId, '123456789');
+    const updatedClip = await db.getClipById(testClip._id); 
+    console.log('Updated clip:', updatedClip);
+    await db.removeClip(testClip.messageId); 
     const allClips = await db.getAllClips();
     console.log('All clips:', allClips);
 
@@ -58,12 +72,6 @@ connectDB().then(async () => {
     console.error('Database test failed:', error);
   }
 });
-
-// Now you can use db operations in your bot commands, for example:
-// db.storeClip(url, description, submittedBy)
-// db.addRating(clipId, rating, ratedBy)
-// db.getAllClips()
-// etc.
 
 // Login to Discord with your client's token
 client.login(process.env.DISCORD_TOKEN);
