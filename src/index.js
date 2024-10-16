@@ -25,7 +25,7 @@ async function startBot() {
     console.error(error);
     await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
-});
+};
 
 // Connect to MongoDB
 connectDB().then(async () => {
@@ -36,18 +36,8 @@ connectDB().then(async () => {
     const testClip = await db.storeClip('https://example.com', 'Test clip', '123456789', testInteractionId, testMessageId);
     console.log('Test clip stored:', testClip);
 
-      const allClips = await db.getAllClips();
-      console.log('All clips:', allClips);
-    }
-
-    // Login to Discord with your client's token
-    try {
-      await client.login(process.env.DISCORD_TOKEN);
-      console.log('Bot is now online!');
-    } catch (error) {
-      console.error('Error logging in to Discord:', error);
-      process.exit(1);
-    }
+    const allClips = await db.getAllClips();
+    console.log('All clips:', allClips);
   } catch (error) {
     console.error('Database test failed:', error);
   }
